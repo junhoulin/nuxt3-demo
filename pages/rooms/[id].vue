@@ -535,12 +535,12 @@ const handleDateChange = (bookingInfo) => {
                 <h5 class="mb-0 text-primary-100 fw-bold">
                   NT$ 10,000
                 </h5>
-                <!-- <RouterLink
-                  :to="{ name: 'booking', params: { roomId: $route.params.roomId } }"
+                <NuxtLink
+                  :to="{ name: 'booking'}"
                   class="btn btn-primary-100 py-4 text-neutral-0 fw-bold rounded-3"
                 >
-                  立即預訂
-                </RouterLink> -->
+                  立即預訂111
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -563,12 +563,12 @@ const handleDateChange = (bookingInfo) => {
               <small class="text-neutral-80 fw-medium">ＮＴ$ 10,000 / {{ daysCount }} 晚 / {{ bookingPeople }} 人</small>
               <span class="text-neutral fs-9 fw-medium text-decoration-underline">{{ daysFormatOnMobile(bookingDate.date?.start) }} - {{ daysFormatOnMobile(bookingDate.date?.end) }}</span>
             </div>
-            <!-- <RouterLink
-              :to="{ name: 'booking', params: { roomId: $route.params.roomId } }"
+            <!-- <NuxtLink
+              :to="{ name: 'booking-bookid', params: { bookid: $route.params.roomId } }"
               class="btn btn-primary-100 px-12 py-4 text-neutral-0 fw-bold rounded-3"
             >
-              立即預訂
-            </RouterLink> -->
+              立即預訂112
+            </NuxtLink> -->
           </template>
         </div>
       </section>
