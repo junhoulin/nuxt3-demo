@@ -3,9 +3,9 @@
 
 <template>
   <NuxtLayout name="account">
-    <AccountLogin />
+    <AccountSignup />
   </NuxtLayout>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 </style>
