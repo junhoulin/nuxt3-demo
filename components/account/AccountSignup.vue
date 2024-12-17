@@ -1,7 +1,18 @@
 <script setup>
 import { Icon } from '@iconify/vue';
-
 const isEmailAndPasswordValid = ref(false);
+const signupData = ref({
+  name: "23424",
+  email: "234@ewq.qwe",
+  password: "qweebqwe222234",
+  phone: "",
+  birthday: {
+  },
+  address: {
+    zipcode: 802,
+    detail: ""
+  }
+})
 </script>
 
 <template>
@@ -68,6 +79,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="hello@exsample.com"
             type="email"
+            v-model="signupData.email"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -82,6 +94,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="請輸入密碼"
             type="password"
+            v-model="signupData.password"
           >
         </div>
         <div class="mb-10 fs-8 fs-md-7">
@@ -96,6 +109,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="請再輸入一次密碼"
             type="password"
+            v-model="signupData.password"
           >
         </div>
         <button
@@ -122,6 +136,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40  rounded-3"
             placeholder="請輸入姓名"
             type="text"
+            v-model="signupData.name"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -136,6 +151,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40  rounded-3"
             placeholder="請輸入手機號碼"
             type="tel"
+            v-model="signupData.email"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">

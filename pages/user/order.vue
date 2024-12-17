@@ -1,7 +1,10 @@
 <script setup>
+definePageMeta({
+  middleware: "user-login",
+});
 import { Icon } from '@iconify/vue';
 
-const roomId = 'a';  // for navigation demo
+const roomId = 'a'; 
 </script>
 
 <template>

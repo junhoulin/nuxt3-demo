@@ -1,6 +1,6 @@
 <script setup>
 const router = useRouter();
-const userCookie = useCookie("user", { // 建立名稱為 user 的 cookie
+const userCookie = useCookie("auth", { // 建立名稱為 user 的 cookie
   path: "/",
   maxAge: 6000,
 });
