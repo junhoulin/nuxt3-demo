@@ -2,5 +2,7 @@
 ## 2024/12/16
 - 將 AccountLogin導入API，並且將取得的資料存進cookies
 - 在 全域新增 apiBase
-
+## 2024/12/16
+- 將 user 的 login 完成 並將 signin完成到API規定之格式資料( 未發送API )
+- 新增 middleware 進入user畫面要丟API去檢查token
 
