@@ -1,18 +1,48 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 const isEmailAndPasswordValid = ref(false);
+const ZipCodeMap = ref ([
+  { detail: '100臺北市中正區', zipcode: 100, city: '臺北市', county: '中正區' },
+    { detail: '103臺北市大同區', zipcode: 103, city: '臺北市', county: '大同區' },
+    { detail: '104臺北市中山區', zipcode: 104, city: '臺北市', county: '中山區' },
+    { detail: '105臺北市松山區', zipcode: 105, city: '臺北市', county: '松山區' },
+    { detail: '106臺北市大安區', zipcode: 106, city: '臺北市', county: '大安區' },
+])
+const confirmPassword = ref("");
+  const birthday =ref({
+    year: "",
+    month: "",
+    day: ""
+  });
+
+
 const signupData = ref({
-  name: "23424",
-  email: "234@ewq.qwe",
-  password: "qweebqwe222234",
+  name: "",
+  email: "",
+  password: "",
   phone: "",
-  birthday: {
-  },
+  birthday: "",
   address: {
     zipcode: 802,
     detail: ""
   }
-})
+});
+
+const pushSignup1 = () => {
+  if (confirmPassword.value !== signupData.value.password) {
+    confirmPassword.value = "";
+    signupData.value.password = "";
+    alert('輸入的密碼不相同');
+  } else {
+    isEmailAndPasswordValid.value = true;
+  }
+};
+
+const pushSignup2 = () => {
+  signupData.value.birthday = 
+  `${birthday.value.year}/${birthday.value.month}/${birthday.value.day}`;
+  console.log(signupData.value)
+}
 </script>
 
 <template>
@@ -109,13 +139,13 @@ const signupData = ref({
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="請再輸入一次密碼"
             type="password"
-            v-model="signupData.password"
+            v-model="confirmPassword"
           >
         </div>
         <button
           class="btn btn-neutral-40 w-100 py-4 text-neutral-60 fw-bold"
           type="button"
-          @click="isEmailAndPasswordValid = true"
+          @click="pushSignup1"
         >
           下一步
         </button>
@@ -151,7 +181,7 @@ const signupData = ref({
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40  rounded-3"
             placeholder="請輸入手機號碼"
             type="tel"
-            v-model="signupData.email"
+            v-model="signupData.phone"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -167,33 +197,36 @@ const signupData = ref({
             <select
               id="birth"
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.year"
             >
               <option
                 v-for="year in 65"
                 :key="year"
-                value="`${year + 1958} 年`"
+                :value="year+1958"
               >
                 {{ year + 1958 }} 年
               </option>
             </select>
             <select
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.month"
             >
               <option
                 v-for="month in 12"
                 :key="month"
-                value="`${month} 月`"
+                :value="month"
               >
                 {{ month }} 月
               </option>
             </select>
             <select
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.day"
             >
               <option
                 v-for="day in 30"
                 :key="day"
-                value="`${day} 日`"
+                :value="day"
               >
                 {{ day }} 日
               </option>
@@ -213,34 +246,13 @@ const signupData = ref({
             >
               <select
                 class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                v-model="signupData.address.zipcode"
               >
-                <option value="臺北市">
-                  臺北市
-                </option>
-                <option value="臺中市">
-                  臺中市
-                </option>
-                <option
-                  selected
-                  value="高雄市"
+                <option  v-for=" item in ZipCodeMap"
+                  :key="item.zipcode"
+                  :value="item.zipcode"
                 >
-                  高雄市
-                </option>
-              </select>
-              <select
-                class="form-select p-4 text-neutral-80 fw-medium rounded-3"
-              >
-                <option value="前金區">
-                  前金區
-                </option>
-                <option value="鹽埕區">
-                  鹽埕區
-                </option>
-                <option
-                  selected
-                  value="新興區"
-                >
-                  新興區
+                {{ item.detail }}
                 </option>
               </select>
             </div>
@@ -249,6 +261,7 @@ const signupData = ref({
               type="text"
               class="form-control p-4 rounded-3"
               placeholder="請輸入詳細地址"
+              v-model="signupData.address.detail"
             >
           </div>
         </div>
@@ -270,6 +283,7 @@ const signupData = ref({
         <button
           class="btn btn-primary-100 w-100 py-4 text-neutral-0 fw-bold"
           type="button"
+          @click="pushSignup2"
         >
           完成註冊
         </button>
