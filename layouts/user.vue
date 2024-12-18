@@ -1,4 +1,14 @@
 <script setup>
+const userinfo = userinfoStore();
+const { getUser } = userinfo;
+const { userDatainfo } = storeToRefs(userinfo);
+const token = useCookie("auth");
+onBeforeMount( async () => {
+  if (token.value) {
+    await getUser();
+  }
+});
+
 </script>
 
 <template>
@@ -24,7 +34,7 @@
             alt="avatar"
           >
           <h1 class="text-neutral-0 fw-bold">
-            Hello，Jessica
+            Hello，{{ userDatainfo.name }}
           </h1>
         </div>
       </div>

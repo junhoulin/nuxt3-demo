@@ -1,6 +1,12 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+const token = useCookie("auth");
+const userinfo = userinfoStore();
 
+// pinia設定
+const { userDatainfo } = storeToRefs(userinfo);
+const { getUser } = userinfo;
+const userName = ref("點我登入");
 const route = useRoute();
 const transparentBgRoute = ['index', 'rooms'];
 
@@ -13,14 +19,25 @@ const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
 }
 
-onMounted(() => {
+onMounted( async () => {
   window.addEventListener('scroll', handleScroll);
+  if (token.value) {
+    await getUser();
+    userName.value = userDatainfo.value.name;
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 })
 
+watch(userDatainfo, (newVal) => {
+  if (newVal.name) {
+    userName.value = newVal.name;
+  } else {
+    userName.value = "點我登入";
+  }
+});
 </script>
 
 <template>
@@ -88,7 +105,7 @@ onUnmounted(() => {
                     class="fs-5"
                     icon="mdi:account-circle-outline"
                   />
-                  Jessica
+                  {{userName}}
                 </button>
                 <ul
                   class="dropdown-menu py-3 overflow-hidden"
@@ -97,7 +114,7 @@ onUnmounted(() => {
                   <li>
                     <a
                       class="dropdown-item px-6 py-4"
-                      href="#"
+                      href="/user"
                     >我的帳戶</a>
                   </li>
                   <li>

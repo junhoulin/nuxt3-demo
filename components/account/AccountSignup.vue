@@ -1,7 +1,6 @@
 <script setup>
 const userStore = accountStore();
 const { setEmail } = userStore;
-setEmail('wqeqweqweqweqwe');
 import { Icon } from '@iconify/vue';
 const router = useRouter();
 const isEmailAndPasswordValid = ref(false);

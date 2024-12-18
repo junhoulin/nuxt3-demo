@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware( async (to, from) => {
   const token = useCookie("auth");
   const config = useRuntimeConfig();
-	if (!token.value) return false;
+	if (!token.value) navigateTo("/account");
   const userInfo = await $fetch("/user/check",
     {
       baseURL: config.public.apiBase,

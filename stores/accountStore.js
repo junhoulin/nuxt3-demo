@@ -1,4 +1,4 @@
-export const accountStore = defineStore('user', () => {
+export const accountStore = defineStore('account', () => {
   const email = ref('');
 
   const setEmail = (email1) => {

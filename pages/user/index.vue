@@ -2,44 +2,11 @@
 definePageMeta({
   middleware: "user-login",
 });
-const config = useRuntimeConfig();
-const token = useCookie("auth");
-
+const userinfo = userinfoStore();
+const { userDatainfo } = storeToRefs(userinfo);
 const isEditPassword = ref(false);
 const isEditProfile = ref(false);
-const birthYear = ref(null);
-const birthMonth = ref(null);
-const birthDay = ref(null);
-
-const userData = ref({
-  name: '',
-  email: '',
-  phone: '',
-  birthday: '',
-  address: {
-    detail: '',
-    zipcode: '',
-  }
-});
-
-
-const getUser = async () => {
-  try{
-    await $fetch('/user/',{
-    baseURL: config.public.apiBase,
-    method: 'get',
-    headers: {
-      Authorization: token.value
-    }
-  }).then((res) => {
-    userData.value = res.result
-  })
-  } catch(error) {
-    console.log('errpr', errpr)
-  };
-}
-
-getUser();
+const userData = userDatainfo;
 </script>
 
 <template>
