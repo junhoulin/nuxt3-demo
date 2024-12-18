@@ -6,4 +6,4 @@
 - 將 user 的 login 完成 並將 signin完成到API規定之格式資料( 未發送API )
 - 新增 middleware 進入user畫面要丟API去檢查token
 ## 2024/12/17
-- 完成使用者註冊串接 、安裝Pinia
+- 完成使用者註冊串接 、設定Pinia、day.js、將個人頁面資料串接正常，使用者登入/註冊完成80%。

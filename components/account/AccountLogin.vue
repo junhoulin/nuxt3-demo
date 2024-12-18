@@ -4,7 +4,7 @@ const { email } = storeToRefs(userStore);
 const router = useRouter();
 const userCookie = useCookie("auth", { 
   path: "/",
-  maxAge: 6000,
+  maxAge: 60000,
 });
 
 const loginData = ref({

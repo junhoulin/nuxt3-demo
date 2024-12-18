@@ -2,12 +2,11 @@
 import { Icon } from '@iconify/vue';
 const token = useCookie("auth");
 const userinfo = userinfoStore();
-
-// pinia設定
 const { userDatainfo } = storeToRefs(userinfo);
 const { getUser } = userinfo;
 const userName = ref("點我登入");
 const route = useRoute();
+const router = useRouter();
 const transparentBgRoute = ['index', 'rooms'];
 
 const isTransparentRoute = computed(() => transparentBgRoute.includes(route.name));
@@ -31,13 +30,22 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 })
 
-watch(userDatainfo, (newVal) => {
+watch(userName.value, (newVal) => {
   if (newVal.name) {
     userName.value = newVal.name;
   } else {
     userName.value = "點我登入";
   }
 });
+
+const removeCookie = () => {
+  const token = useCookie('auth');
+  token.value = undefined; 
+  alert('已登出')
+  router.push('/')
+  userName.value = "點我登入";
+}
+
 </script>
 
 <template>
@@ -121,6 +129,7 @@ watch(userDatainfo, (newVal) => {
                     <a
                       class="dropdown-item px-6 py-4"
                       href="#"
+                      @click.prevent="removeCookie()"
                     >登出</a>
                   </li>
                 </ul>

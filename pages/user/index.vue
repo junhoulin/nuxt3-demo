@@ -1,12 +1,43 @@
 <script setup>
+const ZipCodeMap = ref ([
+  { detail: '100臺北市中正區', zipcode: 100, city: '臺北市', county: '中正區' },
+    { detail: '103臺北市大同區', zipcode: 103, city: '臺北市', county: '大同區' },
+    { detail: '104臺北市中山區', zipcode: 104, city: '臺北市', county: '中山區' },
+    { detail: '105臺北市松山區', zipcode: 105, city: '臺北市', county: '松山區' },
+    { detail: '106臺北市大安區', zipcode: 106, city: '臺北市', county: '大安區' },
+])
+
+import dayjs from 'dayjs';
+
 definePageMeta({
   middleware: "user-login",
 });
 const userinfo = userinfoStore();
 const { userDatainfo } = storeToRefs(userinfo);
+
 const isEditPassword = ref(false);
 const isEditProfile = ref(false);
 const userData = userDatainfo;
+const birthday = dayjs(userData.value.birthday); 
+// 格式化日期為 YYYY-MM-DD
+const formattedBirthday = birthday.format('YYYY-MM-DD');
+const [Year, Month, Day] = formattedBirthday.split('-').map(Number);
+
+const birthYear =ref(0);
+const birthMonth =ref(0);
+const birthDay =ref(0);
+
+const changYear = () => {
+  birthYear.value = Year;
+  birthMonth.value = Month;
+  birthDay.value = Day;
+}
+
+const editButton = async () => {
+  isEditProfile.value = !isEditProfile.value;
+  await changYear();
+};
+
 </script>
 
 <template>
@@ -159,7 +190,8 @@ const userData = userDatainfo;
               <span
                 class="form-control pe-none p-0 text-neutral-100 fw-bold border-0"
                 :class="{'d-none': isEditProfile}"
-              >{{ userData.birthday }}</span>
+                v-day:YYYY-MM-DD="userData.birthday"
+              ></span>
               <div
                 class="d-flex gap-2"
                 :class="{'d-none': !isEditProfile}"
@@ -167,33 +199,36 @@ const userData = userDatainfo;
                 <select
                   id="birth"
                   class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                  v-model="birthYear"
                 >
                   <option
                     v-for="year in 65"
                     :key="year"
-                    value="`${year + 1958} 年`"
+                    :value="year + 1958"
                   >
-                    {{ year + 1958 }} 年
+                  {{ year + 1958 }} 年
                   </option>
                 </select>
                 <select
                   class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                  v-model="birthMonth"
                 >
                   <option
                     v-for="month in 12"
                     :key="month"
-                    value="`${month} 月`"
+                    :value="month"
                   >
                     {{ month }} 月
                   </option>
                 </select>
                 <select
                   class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                  v-model="birthDay"
                 >
                   <option
                     v-for="day in 30"
                     :key="day"
-                    value="`${day} 日`"
+                    :value="day"
                   >
                     {{ day }} 日
                   </option>
@@ -220,33 +255,12 @@ const userData = userDatainfo;
                   <select
                     class="form-select p-4 text-neutral-80 fw-medium rounded-3"
                   >
-                    <option value="臺北市">
-                      臺北市
-                    </option>
-                    <option value="臺中市">
-                      臺中市
-                    </option>
-                    <option
-                      selected
-                      value="高雄市"
+                    <option 
+                      v-for=" item in ZipCodeMap"
+                      :key="item.zipcode"
+                      :value="item.zipcode"
                     >
-                      高雄市
-                    </option>
-                  </select>
-                  <select
-                    class="form-select p-4 text-neutral-80 fw-medium rounded-3"
-                  >
-                    <option value="前金區">
-                      前金區
-                    </option>
-                    <option value="鹽埕區">
-                      鹽埕區
-                    </option>
-                    <option
-                      selected
-                      value="新興區"
-                    >
-                      新興區
+                    {{ item.detail }}
                     </option>
                   </select>
                 </div>
@@ -255,6 +269,7 @@ const userData = userDatainfo;
                   type="text"
                   class="form-control p-4 rounded-3"
                   placeholder="請輸入詳細地址"
+                  :value="userData.address.detail"
                 >
               </div>
             </div>
@@ -263,7 +278,7 @@ const userData = userDatainfo;
             :class="{'d-none': isEditProfile}"
             class="btn btn-outline-primary-100 align-self-start px-8 py-4 rounded-3"
             type="button"
-            @click="isEditProfile = !isEditProfile"
+            @click="editButton"
           >
             編輯
           </button>
