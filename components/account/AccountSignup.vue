@@ -1,5 +1,9 @@
 <script setup>
+const userStore = accountStore();
+const { setEmail } = userStore;
+setEmail('wqeqweqweqweqwe');
 import { Icon } from '@iconify/vue';
+const router = useRouter();
 const isEmailAndPasswordValid = ref(false);
 const ZipCodeMap = ref ([
   { detail: '100臺北市中正區', zipcode: 100, city: '臺北市', county: '中正區' },
@@ -28,20 +32,47 @@ const signupData = ref({
   }
 });
 
-const pushSignup1 = () => {
+const addSignup1 = () => {
   if (confirmPassword.value !== signupData.value.password) {
     confirmPassword.value = "";
     signupData.value.password = "";
     alert('輸入的密碼不相同');
+  } else if(signupData.value.email === "" || signupData.value.password === "") {
+    alert('請輸入信箱、密碼');
   } else {
     isEmailAndPasswordValid.value = true;
   }
 };
 
-const pushSignup2 = () => {
+const addSignup2 = () => {
   signupData.value.birthday = 
   `${birthday.value.year}/${birthday.value.month}/${birthday.value.day}`;
-  console.log(signupData.value)
+  console.log(signupData.value);
+  pushSignup();
+}
+
+const  pushSignup = async () => {
+  const config = useRuntimeConfig();
+  try {
+    const res = await $fetch('/user/signup',{
+      baseURL: config.public.apiBase,
+      method: 'post',
+      body: signupData.value
+    })
+    if (res.status === true) {
+      setEmail(signupData.value.email)
+      router.push("/account");
+    }
+
+  } catch (error) {
+    if (error.data) {
+      console.log('API 回應錯誤內容:', error.data);
+      alert(error.data.message || '註冊失敗，請檢查您的輸入！');
+    } else {
+      console.log(error)
+      alert('註冊失敗，伺服器未返回詳細資訊！');
+    }
+  }
 }
 </script>
 
@@ -145,7 +176,7 @@ const pushSignup2 = () => {
         <button
           class="btn btn-neutral-40 w-100 py-4 text-neutral-60 fw-bold"
           type="button"
-          @click="pushSignup1"
+          @click="addSignup1"
         >
           下一步
         </button>
@@ -283,7 +314,7 @@ const pushSignup2 = () => {
         <button
           class="btn btn-primary-100 w-100 py-4 text-neutral-0 fw-bold"
           type="button"
-          @click="pushSignup2"
+          @click="addSignup2"
         >
           完成註冊
         </button>

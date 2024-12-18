@@ -5,4 +5,5 @@
 ## 2024/12/16
 - 將 user 的 login 完成 並將 signin完成到API規定之格式資料( 未發送API )
 - 新增 middleware 進入user畫面要丟API去檢查token
-
+## 2024/12/17
+- 完成使用者註冊串接 、安裝Pinia

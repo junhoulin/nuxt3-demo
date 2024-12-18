@@ -1,12 +1,14 @@
 <script setup>
+const userStore = accountStore();
+const { email } = storeToRefs(userStore);
 const router = useRouter();
-const userCookie = useCookie("auth", { // 建立名稱為 user 的 cookie
+const userCookie = useCookie("auth", { 
   path: "/",
   maxAge: 6000,
 });
 
 const loginData = ref({
-  email: "",
+  email: email.value,
   password: ""
 })
 
@@ -16,10 +18,7 @@ const loginbtn = async() => {
     const res = await $fetch('/user/login',{
       baseURL: config.public.apiBase,
       method: 'post',
-      headers: {
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify(loginData.value)
+      body: loginData.value
     })
     if (res.status === true) {
       alert("登入成功！");

@@ -12,4 +12,5 @@ export default defineNuxtConfig({
       apiBase: 'https://freyja-api-c6ji.onrender.com/api/v1', // 固定值
     },
   },
+  modules: ["@pinia/nuxt"],
 })

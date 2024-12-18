@@ -7,6 +7,10 @@ const token = useCookie("auth");
 
 const isEditPassword = ref(false);
 const isEditProfile = ref(false);
+const birthYear = ref(null);
+const birthMonth = ref(null);
+const birthDay = ref(null);
+
 const userData = ref({
   name: '',
   email: '',
@@ -16,8 +20,8 @@ const userData = ref({
     detail: '',
     zipcode: '',
   }
-
 });
+
 
 const getUser = async () => {
   try{
