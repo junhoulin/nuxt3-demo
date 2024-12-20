@@ -18,7 +18,8 @@ const loginbtn = async() => {
     const res = await $fetch('/user/login',{
       baseURL: config.public.apiBase,
       method: 'post',
-      body: loginData.value
+      body: loginData.value,
+      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzYyM2I4MTcwYWM5MjQ0NGY2MmQwNzMiLCJpYXQiOjE3MzQ2OTUyOTQsImV4cCI6MTczNTMwMDA5NH0.qmJce4NwfGcmDGzK28taat9sDFWjHDTO3QEEHsXS8AQ"
     })
     if (res.status === true) {
       alert("登入成功！");

@@ -20,9 +20,9 @@ export const userinfoStore = defineStore('useruserinfo', () => {
           Authorization: token.value
         }
       })
-      userDatainfo.value = res.result
+      userDatainfo.value = res.result;
     } catch(error) {
-      console.log('errpr', error)
+      alert(error.message);
     };
   }
   

@@ -36,39 +36,34 @@ export const useRoomStore = defineStore('room', () => {
     bookingDate.date.end = date.end;
   };
 
-  const pushBooking = async () => {
+  const pushBooking = async (user) => {
+    const token = useCookie("auth");
     const data = {
       roomId: roomData.value._id,
       checkInDate: bookingDate.date.start,
       checkOutDate: bookingDate.date.end,
       peopleNum: bookingPeople.value,
-      userInfo: {
-        address: {
-          zipcode: 802,
-          detail: "文山路23號"
-        },
-        name: "Joanne Chen",
-        phone: "0912345678",
-        email: "example@gmail.com"
+      userInfo: JSON.parse(JSON.stringify(user))
+    }
+    try {
+      const config = useRuntimeConfig();
+      const res = await $fetch('/orders/',{
+        baseURL: config.public.apiBase,
+        method: 'post',
+        body: data,
+        headers: {
+          Authorization: token.value
+        }
+      })
+      return res
+    } catch (error) {
+      if (error.data) {
+        console.log('API 回應錯誤內容:', error.data);
+        alert(error.data.message);
+      } else {
+        alert('登入失敗，伺服器未返回詳細資訊！');
       }
     }
-    console.log('roomData', roomData.value)
-    console.log('data', data)
-    // try {
-    //   const config = useRuntimeConfig();
-    //   const res = await $fetch('/orders/',{
-    //     baseURL: config.public.apiBase,
-    //     method: 'post',
-    //     body: 
-    //   })
-    // } catch (error) {
-    //   if (error.data) {
-    //     console.log('API 回應錯誤內容:', error.data);
-    //     alert(error.data.message || '登入失敗，請檢查您的輸入！');
-    //   } else {
-    //     alert('登入失敗，伺服器未返回詳細資訊！');
-    //   }
-    // }
   }
 
   return {

@@ -1,6 +1,15 @@
 <script setup>
 import BookingLoading from '@/components/rooms/BookingLoading.vue';
 import { Icon } from '@iconify/vue';
+
+const ZipCodeMap = ref ([
+  { detail: '100臺北市中正區', zipcode: 100, city: '臺北市', county: '中正區' },
+    { detail: '103臺北市大同區', zipcode: 103, city: '臺北市', county: '大同區' },
+    { detail: '104臺北市中山區', zipcode: 104, city: '臺北市', county: '中山區' },
+    { detail: '105臺北市松山區', zipcode: 105, city: '臺北市', county: '松山區' },
+    { detail: '106臺北市大安區', zipcode: 106, city: '臺北市', county: '大安區' },
+])
+
 const router = useRouter();
 const store = useRoomStore();
 const { pushBooking} = useRoomStore();
@@ -12,28 +21,46 @@ const bookingDate = store.bookingDate;
 const bookingDiscount = store.discount;
 const totalPrice = store.totalPrice
 
-if (process.client) {
-    pushBooking(); // 只在客户端调用 pushBooking
+const userData = ref(
+  {
+    address: {
+      zipcode: 100,
+      detail: ""
+    },
+    name: "",
+    phone: "",
+    email: ""
   }
+)
+
+
 const goBack = () => {
   router.back();
 }
+
+
 const isLoading = ref(false);
 
-const confirmBooking = () => {
+const confirmBooking = async () => {
   isLoading.value = true;
-  if (process.client) {
-    pushBooking(); // 只在客户端调用 pushBooking
-  }
-  setTimeout(() => {
+  try {
+    if (process.client) {
+      const data = await pushBooking(userData.value); // 只在客户端调用 pushBooking
+      const bookid = data.result._id
+      setTimeout(() => {
+        isLoading.value = false;
+        router.push({
+          name: 'booking-bookid',
+          params: {
+            bookid: bookid
+          }
+        })
+      }, 1500);
+    }
+  } catch (error) {
+    alert('error')
     isLoading.value = false;
-    router.push({
-      name: 'booking-bookid',
-      params: {
-        bookid: 'HH2302183151222'
-      }
-    })
-  }, 1500);
+  }
 }
 
 
@@ -144,6 +171,7 @@ const confirmBooking = () => {
                     type="text"
                     class="form-control p-4 fs-8 fs-md-7 rounded-3"
                     placeholder="請輸入姓名"
+                    v-model="userData.name"
                   >
                 </div>
 
@@ -157,6 +185,7 @@ const confirmBooking = () => {
                     type="tel"
                     class="form-control p-4 fs-8 fs-md-7 rounded-3"
                     placeholder="請輸入手機號碼"
+                    v-model="userData.phone"
                   >
                 </div>
 
@@ -170,53 +199,35 @@ const confirmBooking = () => {
                     type="email"
                     class="form-control p-4 fs-8 fs-md-7 rounded-3"
                     placeholder="請輸入電子信箱"
+                    v-model="userData.email"
                   >
                 </div>
 
-                <div class="text-neutral-100">
+                <div class="text-neutral-100 ">
                   <label
                     for="address"
                     class="form-label fs-8 fs-md-7 fw-bold"
                   >地址</label>
-                  <div className="d-flex gap-2 mb-4">
+                  <div className="d-flex gap-2">
                     <select
-                      class="form-select w-50 p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
+                      class="form-select p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
+                      v-model="userData.address.zipcode"
                     >
-                      <option value="臺北市">
-                        臺北市
-                      </option>
-                      <option value="臺中市">
-                        臺中市
-                      </option>
                       <option
-                        selected
-                        value="高雄市"
+                        v-for=" (zip ,index) in ZipCodeMap"
+                        :key="index"
+                        :value="zip.zipcode"
                       >
-                        高雄市
-                      </option>
-                    </select>
-                    <select
-                      class="form-select w-50 p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
-                    >
-                      <option value="前金區">
-                        前金區
-                      </option>
-                      <option value="鹽埕區">
-                        鹽埕區
-                      </option>
-                      <option
-                        selected
-                        value="新興區"
-                      >
-                        新興區
+                        {{ zip.detail }}
                       </option>
                     </select>
                   </div>
                   <input
                     id="address"
                     type="text"
-                    class="form-control p-4 fs-8 fs-md-7 rounded-3"
+                    class="form-control p-4 fs-8 fs-md-7 rounded-3 mt-4"
                     placeholder="請輸入詳細地址"
+                    v-model="userData.address.detail"
                   >
                 </div>
               </div>
