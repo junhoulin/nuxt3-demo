@@ -30,7 +30,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 })
 
-watch(userName.value, (newVal) => {
+watch(userName, (newVal) => {
   if (newVal.name) {
     userName.value = newVal.name;
   } else {
