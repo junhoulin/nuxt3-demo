@@ -30,14 +30,6 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 })
 
-watch(userName, (newVal) => {
-  if (newVal.name) {
-    userName.value = newVal.name;
-  } else {
-    userName.value = "點我登入";
-  }
-});
-
 const removeCookie = () => {
   const token = useCookie('auth');
   token.value = undefined; 
