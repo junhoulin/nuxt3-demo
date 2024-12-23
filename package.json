@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "gh-pages -d .output/public"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.9.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",
+    "gh-pages": "^6.2.0",
     "sass": "^1.70.0"
   },
   "overrides": {
