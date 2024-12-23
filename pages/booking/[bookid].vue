@@ -10,40 +10,6 @@ const goBooking = () => {
 
 const bookdata = ref(
   {
-    userInfo: {
-      address: {
-        zipcode: 0,
-        detail: ""
-      },
-      name: "",
-      phone: "",
-      email: ""
-    },
-    _id: "",
-    roomId: {
-      facilityInfo: [],
-      amenityInfo: [],
-      name: "",
-      description: "",
-      imageUrl: "",
-      imageUrlList: [],
-      areaInfo: "",
-      bedInfo: "",
-      maxPeople: 1,
-      price: 0,
-      status: 0,
-      layoutInfo: [],
-      _id: "預設ID",
-      createdAt: "",
-      updatedAt: ""
-      },
-    checkInDate: "",
-    checkOutDate: "",
-    peopleNum: 1,
-    orderUserId: "",
-    status: 0,
-    createdAt: "",
-    updatedAt: ""
   }
 );
 
@@ -90,7 +56,7 @@ getBooking(bookid);
             />
             <div class="text-neutral-0 fs-1">
               <h1 class="fw-bold">
-                恭喜，{{ bookdata.userInfo.name }}！
+                恭喜，{{ bookdata?.userInfo?.name }}！
               </h1>
               <p class="mb-0 fw-bold">
                 您已預訂成功
@@ -128,19 +94,19 @@ getBooking(bookid);
               <p class="mb-2 text-neutral-40 fw-medium">
                 姓名
               </p>
-              <span class="text-neutral-0 fw-bold">{{ bookdata.userInfo.name }}</span>
+              <span class="text-neutral-0 fw-bold">{{ bookdata?.userInfo?.name }}</span>
             </div>
             <div>
               <p class="mb-2 text-neutral-40 fw-medium">
                 手機號碼
               </p>
-              <span class="text-neutral-0 fw-bold">{{ bookdata.userInfo.phone }}</span>
+              <span class="text-neutral-0 fw-bold">{{ bookdata?.userInfo?.phone }}</span>
             </div>
             <div>
               <p class="mb-2 text-neutral-40 fw-medium">
                 電子信箱
               </p>
-              <span class="text-neutral-0 fw-bold">{{ bookdata.userInfo.email }}</span>
+              <span class="text-neutral-0 fw-bold">{{ bookdata?.userInfo?.email }}</span>
             </div>
           </div>
         </div>
@@ -161,37 +127,37 @@ getBooking(bookid);
 
             <img
               class="img-fluid rounded-3"
-              :src="bookdata.roomId.imageUrl"
+              :src="bookdata?.roomId?.imageUrl"
               alt="room-a"
             >
 
             <section class="d-flex flex-column gap-6">
               <h3 class="d-flex align-items-center mb-6 text-neutral-80 fs-8 fs-md-6 fw-bold">
                 <p class="mb-0">
-                  {{ bookdata.roomId.name}}，{{ bookdata.roomId.status }} 晚
+                  {{ bookdata?.roomId?.name}}，{{ bookdata?.roomId?.status }} 晚
                 </p>
                 <span
                   class="d-inline-block mx-4 bg-neutral-80"
                   style="width: 1px;height: 18px;"
                 />
                 <p class="mb-0">
-                  住宿人數：{{ bookdata.peopleNum}}位
+                  住宿人數：{{ bookdata?.peopleNum}}位
                 </p>
               </h3>
 
               <div class="text-neutral-80 fs-8 fs-md-7 fw-bold">
                 <p class="title-deco mb-2">
-                  入住：{{ bookdata.checkInDate }}，15:00 可入住
+                  入住：{{ bookdata?.checkInDate }}，15:00 可入住
                 </p>
                 <p
                   class="title-deco mb-0"
                 >
-                  退房：{{ bookdata.checkOutDate}}，12:00 前退房
+                  退房：{{ bookdata?.checkOutDate}}，12:00 前退房
                 </p>
               </div>
 
               <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-bold">
-                NT$ {{ bookdata.roomId.price }}
+                NT$ {{ bookdata?.roomId?.price }}
               </p>
             </section>
 
@@ -203,7 +169,7 @@ getBooking(bookid);
               </h3>
               <ul class="d-flex flex-wrap row-gap-2 column-gap-10 p-6 mb-0 fs-8 fs-md-7 bg-neutral-0 border border-neutral-40 rounded-3 list-unstyled">
                 <li class="flex-item d-flex gap-2"
-                  v-for=" (facilityInfo ,index) in bookdata.roomId.facilityInfo"
+                  v-for=" (facilityInfo ,index) in bookdata?.roomId?.facilityInfo"
                   :key="index"
                 >
                   <Icon
@@ -211,7 +177,7 @@ getBooking(bookid);
                     icon="material-symbols:check"
                   />
                   <p class="mb-0 text-neutral-80 fw-bold">
-                    {{ facilityInfo.title }}
+                    {{ facilityInfo?.title }}
                   </p>
                 </li>
               </ul>
@@ -223,7 +189,7 @@ getBooking(bookid);
               </h3>
               <ul class="d-flex flex-wrap row-gap-2 column-gap-10 p-6 mb-0 fs-8 fs-md-7 bg-neutral-0 border border-neutral-40 rounded-3 list-unstyled">
                 <li class="flex-item d-flex gap-2"
-                  v-for=" (amenityInfo ,index) in bookdata.roomId.amenityInfo"
+                  v-for=" (amenityInfo ,index) in bookdata?.roomId?.amenityInfo"
                   :key="index"
                 >
                   <Icon
@@ -231,7 +197,7 @@ getBooking(bookid);
                     icon="material-symbols:check"
                   />
                   <p class="mb-0 text-neutral-80 fw-bold">
-                    {{ amenityInfo.title }}
+                    {{ amenityInfo?.title }}
                   </p>
                 </li>
               </ul>
