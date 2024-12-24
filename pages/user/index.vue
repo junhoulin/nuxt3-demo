@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  middleware: "user-login",
+});
 const ZipCodeMap = ref ([
   { detail: '100臺北市中正區', zipcode: 100, city: '臺北市', county: '中正區' },
     { detail: '103臺北市大同區', zipcode: 103, city: '臺北市', county: '大同區' },
@@ -8,10 +11,6 @@ const ZipCodeMap = ref ([
 ])
 
 import dayjs from 'dayjs';
-
-definePageMeta({
-  middleware: "user-login",
-});
 const userinfo = userinfoStore();
 const { userDatainfo } = storeToRefs(userinfo);
 

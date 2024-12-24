@@ -17,9 +17,10 @@ export default defineNuxtRouteMiddleware( async (to, from) => {
     // 驗證成功，終止函式執行
     return;
   }
-  // 驗證失敗，導引回登入頁面
-  // 在伺服器端和客戶端操作路由
-  alert('請先 註冊 / 登入 帳號');
+  if (process.client) {
+    alert("請先 登入/註冊 帳號");
+  }
+    // 驗證失敗
   return navigateTo("/account");
 
 })
