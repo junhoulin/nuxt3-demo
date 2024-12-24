@@ -12,10 +12,10 @@ export default defineNuxtConfig({
     },
   },
   modules: ["@pinia/nuxt","@vee-validate/nuxt"],
-  app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/nuxt3-demo/' : '/',
-    buildAssetsDir: '/static/'
-  },
+  // app: {
+  //   baseURL: process.env.NODE_ENV === 'production' ? '/nuxt3-demo/' : '/',
+  //   buildAssetsDir: '/static/'
+  // },
   veeValidate: {
     componentNames: {
       Form: "VForm",
