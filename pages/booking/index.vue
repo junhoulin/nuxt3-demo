@@ -21,7 +21,6 @@ const daysCount = store.daysCount;
 const bookingDate = store.bookingDate;
 const bookingDiscount = store.discount;
 const totalPrice = store.totalPrice
-
 const userData = ref(
   {
     address: {

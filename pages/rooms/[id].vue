@@ -14,6 +14,7 @@ const roomId = route.params.id
 const roomData = ref({})
 
 const config = useRuntimeConfig();
+
 try {
   const { data }= await useFetch(`/rooms/${roomId}`,{
     baseURL: config.public.apiBase,
