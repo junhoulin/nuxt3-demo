@@ -159,7 +159,7 @@ const confirmBooking = async () => {
               </div>
 
               <div class="d-flex flex-column gap-6">
-                <VForm v-slot="{ errors, meta, resetForm }">
+                <VForm v-slot="{ errors }">
                   <div class="text-neutral-100">
                     <label
                       for="name"
@@ -173,6 +173,7 @@ const confirmBooking = async () => {
                       :class="{ 'is-invalid': errors['name'] }"
                       placeholder="請輸入姓名"
                       rules="required|username"
+                      v-model="userData.name"
                     />
                     <VErrorMessage class="invalid-feedback" name="name" />
                   </div>
@@ -190,6 +191,7 @@ const confirmBooking = async () => {
                       :class="{ 'is-invalid': errors['phone'] }"
                       placeholder="請輸入手機號碼"
                       rules="required|phone"
+                      v-model="userData.phone"
                     />
                     <VErrorMessage class="invalid-feedback" name="phone" />
                   </div>
@@ -207,6 +209,7 @@ const confirmBooking = async () => {
                       :class="{ 'is-invalid': errors['email'] }"
                       placeholder="請輸入email"
                       rules="required|email"
+                      v-model="userData.email"
                     />
                     <VErrorMessage class="invalid-feedback" name="email" />
                   </div>
@@ -238,6 +241,7 @@ const confirmBooking = async () => {
                       :class="{ 'is-invalid': errors['address'] }"
                       placeholder="請輸入詳細地址"
                       rules="required"
+                      v-model="userData.address.detail"
                     />
                     <VErrorMessage class="invalid-feedback" name="address" />
                   </div>
