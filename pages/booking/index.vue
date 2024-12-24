@@ -56,12 +56,11 @@ const confirmBooking = async () => {
         }
       })
     }, 1500);
-  } catch (error) {
-    alert('error')
+  } catch (errors) {
+    alert('請完成訂房人資訊')
     isLoading.value = false;
   }
 }
-
 
 </script>
 
@@ -160,75 +159,89 @@ const confirmBooking = async () => {
               </div>
 
               <div class="d-flex flex-column gap-6">
-                <div class="text-neutral-100">
-                  <label
-                    for="name"
-                    class="form-label fs-8 fs-md-7 fw-bold"
-                  >姓名</label>
-                  <input
-                    id="name"
-                    type="text"
-                    class="form-control p-4 fs-8 fs-md-7 rounded-3"
-                    placeholder="請輸入姓名"
-                    v-model="userData.name"
-                  >
-                </div>
-
-                <div class="text-neutral-100">
-                  <label
-                    for="phone"
-                    class="form-label fs-8 fs-md-7 fw-bold"
-                  >手機號碼</label>
-                  <input
-                    id="phone"
-                    type="tel"
-                    class="form-control p-4 fs-8 fs-md-7 rounded-3"
-                    placeholder="請輸入手機號碼"
-                    v-model="userData.phone"
-                  >
-                </div>
-
-                <div class="text-neutral-100">
-                  <label
-                    for="email"
-                    class="form-label fs-8 fs-md-7 fw-bold"
-                  >電子信箱</label>
-                  <input
-                    id="email"
-                    type="email"
-                    class="form-control p-4 fs-8 fs-md-7 rounded-3"
-                    placeholder="請輸入電子信箱"
-                    v-model="userData.email"
-                  >
-                </div>
-
-                <div class="text-neutral-100 ">
-                  <label
-                    for="address"
-                    class="form-label fs-8 fs-md-7 fw-bold"
-                  >地址</label>
-                  <div className="d-flex gap-2">
-                    <select
-                      class="form-select p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
-                      v-model="userData.address.zipcode"
-                    >
-                      <option
-                        v-for=" (zip ,index) in ZipCodeMap"
-                        :key="index"
-                        :value="zip.zipcode"
-                      >
-                        {{ zip.detail }}
-                      </option>
-                    </select>
+                <VForm v-slot="{ errors, meta, resetForm }">
+                  <div class="text-neutral-100">
+                    <label
+                      for="name"
+                      class="form-label fs-8 fs-md-7 fw-bold"
+                    >姓名</label>
+                    <VField
+                      id="name"
+                      name="name"
+                      type="text"
+                      class="form-control  p-4 fs-8 fs-md-7 rounded-3"
+                      :class="{ 'is-invalid': errors['name'] }"
+                      placeholder="請輸入姓名"
+                      rules="required|username"
+                    />
+                    <VErrorMessage class="invalid-feedback" name="name" />
                   </div>
-                  <input
-                    id="address"
-                    type="text"
-                    class="form-control p-4 fs-8 fs-md-7 rounded-3 mt-4"
-                    placeholder="請輸入詳細地址"
-                    v-model="userData.address.detail"
-                  >
-                </div>
+
+                  <div class="text-neutral-100">
+                    <label
+                      for="phone"
+                      class="form-label fs-8 fs-md-7 fw-bold"
+                    >手機號碼</label>
+                    <VField
+                      id="phone"
+                      name="phone"
+                      type="text"
+                      class="form-control  p-4 fs-8 fs-md-7 rounded-3"
+                      :class="{ 'is-invalid': errors['phone'] }"
+                      placeholder="請輸入手機號碼"
+                      rules="required|phone"
+                    />
+                    <VErrorMessage class="invalid-feedback" name="phone" />
+                  </div>
+
+                  <div class="text-neutral-100">
+                    <label
+                      for="email"
+                      class="form-label fs-8 fs-md-7 fw-bold"
+                    >電子信箱</label>
+                    <VField
+                      id="email"
+                      name="email"
+                      type="text"
+                      class="form-control  p-4 fs-8 fs-md-7 rounded-3"
+                      :class="{ 'is-invalid': errors['email'] }"
+                      placeholder="請輸入email"
+                      rules="required|email"
+                    />
+                    <VErrorMessage class="invalid-feedback" name="email" />
+                  </div>
+
+                  <div class="text-neutral-100 ">
+                    <label
+                      for="address"
+                      class="form-label fs-8 fs-md-7 fw-bold"
+                    >地址</label>
+                    <div className="d-flex gap-2">
+                      <select
+                        class="form-select p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
+                        v-model="userData.address.zipcode"
+                      >
+                        <option
+                          v-for=" (zip ,index) in ZipCodeMap"
+                          :key="index"
+                          :value="zip.zipcode"
+                        >
+                          {{ zip.detail }}
+                        </option>
+                      </select>
+                    </div>
+                    <VField
+                      id="address"
+                      name="address"
+                      type="text"
+                      class="form-control  p-4 fs-8 fs-md-7 rounded-3  mt-4"
+                      :class="{ 'is-invalid': errors['address'] }"
+                      placeholder="請輸入詳細地址"
+                      rules="required"
+                    />
+                    <VErrorMessage class="invalid-feedback" name="address" />
+                  </div>
+                </VForm>
               </div>
             </section>
 

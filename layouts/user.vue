@@ -3,11 +3,11 @@ const userinfo = userinfoStore();
 const { getUser } = userinfo;
 const { userDatainfo } = storeToRefs(userinfo);
 const token = useCookie("auth");
-onBeforeMount( async () => {
-  if (token.value) {
-    await getUser();
-  }
-});
+
+if (token.value) {
+  await getUser();
+}
+
 
 </script>
 
@@ -34,7 +34,7 @@ onBeforeMount( async () => {
             alt="avatar"
           >
           <h1 class="text-neutral-0 fw-bold">
-            Hello，{{ userDatainfo.name }}
+            Hello，{{ userDatainfo?.name || 貴賓 }}
           </h1>
         </div>
       </div>

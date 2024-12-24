@@ -1,6 +1,6 @@
 export const userinfoStore = defineStore('useruserinfo', () => {
   const userDatainfo = ref({
-    name: '',
+    name: '請先登入',
     email: '',
     phone: '',
     birthday: '',

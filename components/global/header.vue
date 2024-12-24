@@ -4,11 +4,9 @@ const token = useCookie("auth");
 const userinfo = userinfoStore();
 const { userDatainfo } = storeToRefs(userinfo);
 const { getUser } = userinfo;
-const userName = ref("點我登入");
 const route = useRoute();
 const router = useRouter();
 const transparentBgRoute = ['index', 'rooms'];
-
 const isTransparentRoute = computed(() => transparentBgRoute.includes(route.name));
 
 
@@ -20,10 +18,6 @@ const handleScroll = () => {
 
 onMounted( async () => {
   window.addEventListener('scroll', handleScroll);
-  if (token.value) {
-    await getUser();
-    userName.value = userDatainfo.value.name;
-  }
 })
 
 onUnmounted(() => {
@@ -33,9 +27,9 @@ onUnmounted(() => {
 const removeCookie = () => {
   const token = useCookie('auth');
   token.value = undefined; 
+  userDatainfo.value.name = '請先登入'
   alert('已登出')
   router.push('/')
-  userName.value = "點我登入";
 }
 
 </script>
@@ -105,7 +99,7 @@ const removeCookie = () => {
                     class="fs-5"
                     icon="mdi:account-circle-outline"
                   />
-                  {{userName}}
+                  {{userDatainfo?.name}}
                 </button>
                 <ul
                   class="dropdown-menu py-3 overflow-hidden"

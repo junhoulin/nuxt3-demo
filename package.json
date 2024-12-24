@@ -13,6 +13,9 @@
   "dependencies": {
     "@pinia/nuxt": "^0.9.0",
     "@popperjs/core": "^2.11.8",
+    "@vee-validate/i18n": "^4.15.0",
+    "@vee-validate/nuxt": "^4.15.0",
+    "@vee-validate/rules": "^4.15.0",
     "bootstrap": "^5.3.3",
     "dayjs": "^1.11.13",
     "nuxt": "^3.14.1592",
