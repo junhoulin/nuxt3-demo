@@ -21,15 +21,14 @@ const getBooking = async (id) => {
     const token = useCookie("auth");
     try {
       const config = useRuntimeConfig();
-      const res = await $fetch(`/orders/${id}`,{
+      const { data } = await useFetch(`/orders/${id}`,{
         baseURL: config.public.apiBase,
         method: 'GET',
         headers: {
           Authorization: token.value
         }
       })
-      bookdata.value = res.result;
-      console.log('bookdata',bookdata.value)
+      bookdata.value = data.value.result;
     } catch (error) {
       if (error.data) {
         console.log('API 回應錯誤內容:', error.data);
@@ -41,6 +40,8 @@ const getBooking = async (id) => {
 }
 
 getBooking(bookid);
+
+
 
 </script>
 

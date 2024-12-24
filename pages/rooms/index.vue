@@ -10,25 +10,22 @@ import 'swiper/css/pagination';
 const modules = ref([Autoplay, Navigation, Pagination]);
 
 const rooms = ref([])
-const getRooms = async () => {
-  const config = useRuntimeConfig();
-  try {
-    const { data }= await useFetch('/rooms',{
-      baseURL: config.public.apiBase,
-      method: "get",
-    }) 
-    rooms.value = data.value.result;
-  } catch (error) {
-    if (error.data) {
-      console.log('API 回應錯誤內容:', error.data);
-    } else {
-      console.log('登入失敗，伺服器未返回詳細資訊！');
-    }
+const config = useRuntimeConfig();
+try {
+  const { data }= await useFetch('/rooms',{
+    baseURL: config.public.apiBase,
+    method: "get",
+  }) 
+  rooms.value = data.value.result;
+} catch (error) {
+  if (error.data) {
+    console.log('API 回應錯誤內容:', error.data);
+  } else {
+    console.log('登入失敗，伺服器未返回詳細資訊！');
   }
 }
 
 
-getRooms();
 
 </script>
 

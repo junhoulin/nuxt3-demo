@@ -21,43 +21,36 @@ const slideNext = () => {
   roomSwiper.value.$el.swiper.slideNext();
 }
 
-const getNews = async () => {
-  const config = useRuntimeConfig();
-  try {
-    const { data }= await useFetch('/home/news/',{
-      baseURL: config.public.apiBase,
-      method: "get",
-    }) 
-    newsData.value = data.value.result;
-  } catch (error) {
-    if (error.data) {
-      console.log('API 回應錯誤內容:', error.data);
-    } else {
-      console.log('登入失敗，伺服器未返回詳細資訊！');
-    }
+const config = useRuntimeConfig();
+
+try {
+  const { data }= await useFetch('/home/news/',{
+    baseURL: config.public.apiBase,
+    method: "get",
+  }) 
+  newsData.value = data.value.result;
+} catch (error) {
+  if (error.data) {
+    console.log('API 回應錯誤內容:', error.data);
+  } else {
+    console.log('登入失敗，伺服器未返回詳細資訊！');
   }
 }
 
-const getCulinaary = async () => {
-  const config = useRuntimeConfig();
-  try {
-    const { data }= await useFetch('/home/culinary',{
-      baseURL: config.public.apiBase,
-      method: "get",
-    }) 
-    culinary.value = data.value.result;
-  } catch (error) {
-    if (error.data) {
-      console.log('API 回應錯誤內容:', error.data);
-    } else {
-      console.log('登入失敗，伺服器未返回詳細資訊！');
-    }
+try {
+  const { data }= await useFetch('/home/culinary',{
+    baseURL: config.public.apiBase,
+    method: "get",
+  }) 
+  culinary.value = data.value.result;
+} catch (error) {
+  if (error.data) {
+    console.log('API 回應錯誤內容:', error.data);
+  } else {
+    console.log('登入失敗，伺服器未返回詳細資訊！');
   }
 }
 
-
-getCulinaary();
-getNews();
 
 </script>
 

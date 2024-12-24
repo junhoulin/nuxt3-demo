@@ -10,6 +10,7 @@ const ZipCodeMap = ref ([
     { detail: '106臺北市大安區', zipcode: 106, city: '臺北市', county: '大安區' },
 ])
 
+
 const router = useRouter();
 const store = useRoomStore();
 const { pushBooking} = useRoomStore();
@@ -44,19 +45,17 @@ const isLoading = ref(false);
 const confirmBooking = async () => {
   isLoading.value = true;
   try {
-    if (process.client) {
-      const data = await pushBooking(userData.value); // 只在客户端调用 pushBooking
-      const bookid = data.result._id
-      setTimeout(() => {
-        isLoading.value = false;
-        router.push({
-          name: 'booking-bookid',
-          params: {
-            bookid: bookid
-          }
-        })
-      }, 1500);
-    }
+    const data = await pushBooking(userData.value); // 只在客户端调用 pushBooking
+    const bookid = data.result._id
+    setTimeout(() => {
+      isLoading.value = false;
+      router.push({
+        name: 'booking-bookid',
+        params: {
+          bookid: bookid
+        }
+      })
+    }, 1500);
   } catch (error) {
     alert('error')
     isLoading.value = false;

@@ -1,36 +1,32 @@
 <script setup>
-  import DatePickerModal from '@/components/rooms/DatePickerModal.vue';
-  import { Icon } from '@iconify/vue';
+import DatePickerModal from '@/components/rooms/DatePickerModal.vue';
+import { Icon } from '@iconify/vue';
 
-  const store = useRoomStore();
-  // 獲取單肩房間資料
-  const route = useRoute()
-  const roomId = route.params.id
-  const roomData = ref({})
+definePageMeta({
+  middleware: "user-login",
+});
 
+const store = useRoomStore();
+// 獲取單肩房間資料
+const route = useRoute()
+const router = useRouter()
+const roomId = route.params.id
+const roomData = ref({})
 
-  const getRoom = async () => {
-    const config = useRuntimeConfig();
-    try {
-      const { data }= await useFetch(`/rooms/${roomId}`,{
-        baseURL: config.public.apiBase,
-        method: "get",
-      }) 
-      roomData.value = data.value.result;
-      console.log('first', roomData.value);
-    } catch (error) {
-      if (error.data) {
-        console.log('API 回應錯誤內容:', error.data);
-      } else {
-        console.log('登入失敗，伺服器未返回詳細資訊！');
-      }
-    }
+const config = useRuntimeConfig();
+try {
+  const { data }= await useFetch(`/rooms/${roomId}`,{
+    baseURL: config.public.apiBase,
+    method: "get",
+  }) 
+  roomData.value = data.value.result;
+} catch (error) {
+  if (error.data) {
+    console.log('API 回應錯誤內容:', error.data);
+  } else {
+    console.log('登入失敗，伺服器未返回詳細資訊！');
   }
-
-  getRoom();
-
-
-
+}
 
 const datePickerModal = ref(null);
 
@@ -85,13 +81,18 @@ const handleDateChange = (bookingInfo) => {
 
 const comfirmData = () => {
   // 存儲房間資料到 Pinia
-  store.setRoomData(roomData.value);
-  store.setBookingPeople(bookingPeople.value);
-  store.setDaysCount(daysCount.value);
-  store.setBookingDate({
-    start: bookingDate.date.start,
-    end: bookingDate.date.end,
-  });
+  if(bookingDate.date.start && bookingDate.date.end) {
+    store.setRoomData(roomData.value);
+    store.setBookingPeople(bookingPeople.value);
+    store.setDaysCount(daysCount.value);
+    store.setBookingDate({
+      start: bookingDate.date.start,
+      end: bookingDate.date.end,
+    });
+    router.push('/booking')
+  } else {
+    alert('請輸入完整日期')
+  }
 }
 
 </script>
@@ -410,9 +411,6 @@ const comfirmData = () => {
                 NT$ {{ roomData.price}}
               </h5>
               <NuxtLink
-                :to="{ 
-                  name: 'booking',
-                }"
                 class="btn btn-primary-100 py-4 text-neutral-0 fw-bold rounded-3"
                 @click="comfirmData"
               >
@@ -429,6 +427,7 @@ const comfirmData = () => {
           <button
             class="btn btn-primary-100 px-12 py-4 text-neutral-0 fw-bold rounded-3"
             type="button"
+            @click="openModal"
           >
             查看可訂日期
           </button>
@@ -448,12 +447,13 @@ const comfirmData = () => {
         </template>
       </div>
     </section>
-
-    <DatePickerModal
-      ref="datePickerModal"
-      :date-time="bookingDate"
-      @handle-date-change="handleDateChange"
-    />
+    <ClientOnly>
+      <DatePickerModal
+        ref="datePickerModal"
+        :date-time="bookingDate"
+        @handle-date-change="handleDateChange"
+      />
+    </ClientOnly>
   </main>
 </template>
 
