@@ -21,6 +21,7 @@ onMounted( async () => {
 })
 
 onUnmounted(() => {
+  getUser()
   window.removeEventListener('scroll', handleScroll);
 })
 

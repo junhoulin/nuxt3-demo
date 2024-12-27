@@ -1,10 +1,65 @@
 <script setup>
+import dayjs from 'dayjs';
 definePageMeta({
   middleware: "user-login",
 });
 import { Icon } from '@iconify/vue';
+const userRoom =ref([]);
+const commingRoom =ref(null);
+const token = useCookie("auth");
+
+const calculateDaysCount = (checkInDate, checkOutDate) => {
+  const checkIn = dayjs(checkInDate);
+  const checkOut = dayjs(checkOutDate);
+  return(checkOut.$D - checkIn.$D);
+};
+
+const findClosestBooking = (rooms) => {
+  const now = dayjs();
+  // 篩選未過期的訂單，並找到最接近的日期
+  const upcomingRooms = rooms.filter((room) => dayjs(room.checkInDate).isAfter(now));
+  if (upcomingRooms.length === 0) return null; // 如果沒有即將到來的訂單，回傳 null
+  
+  return upcomingRooms.reduce((closest, current) => {
+    const closestDate = dayjs(closest.checkInDate);
+    const currentDate = dayjs(current.checkInDate);
+    return currentDate.diff(now) < closestDate.diff(now) ? current : closest;
+  });
+};
+
+
+try {
+  const config = useRuntimeConfig();
+  const data = await $fetch(`/orders/`,{
+    baseURL: config.public.apiBase,
+    method: 'GET',
+    headers: {
+      Authorization: token.value
+    }
+  })
+
+  userRoom.value = data.result.map((room) => {
+    const daysCount = calculateDaysCount(room.checkInDate, room.checkOutDate)
+    return {
+      ...room,
+      daysCount: daysCount
+    };
+  });
+  commingRoom.value = findClosestBooking(userRoom.value);
+  console.log('userRoom.value', userRoom.value);
+  console.log('commingRoom.value', commingRoom.value);
+} catch (error) {
+  if (error.data) {
+    console.log('API 回應錯誤內容:', error.data);
+    alert(error.data.message);
+  } else {
+    alert('伺服器未返回詳細資訊！');
+  }
+}
+
 
 const roomId = 'a'; 
+
 </script>
 
 <template>
@@ -290,134 +345,49 @@ const roomId = 'a';
           <h2 class="mb-0 text-neutral-100 fs-7 fs-md-5 fw-bold">
             歷史訂單
           </h2>
+          <div v-for="room in userRoom" :key="room._id">
+            <div class="d-flex flex-column flex-lg-row gap-6">
+              <img
+                class="img-fluid object-fit-cover rounded-3"
+                style="max-width: 120px; height: 80px;"
+                :src="room.roomId.imageUrl"
+                alt="room-a"
+              >
+              <section class="d-flex flex-column gap-4">
+                <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-medium">
+                  預訂參考編號： {{ room._id }}
+                </p>
+              
+                <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-md-6 fw-bold">
+                  {{ room.roomId.name }}
+                </h3>
 
-          <div class="d-flex flex-column flex-lg-row gap-6">
-            <img
-              class="img-fluid object-fit-cover rounded-3"
-              style="max-width: 120px; height: 80px;"
-              src="/images/room-b-sm-1.png"
-              alt="room-a"
-            >
-            <section class="d-flex flex-column gap-4">
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-medium">
-                預訂參考編號： HH2302183151222
-              </p>
-            
-              <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-md-6 fw-bold">
-                尊爵雙人房
-              </h3>
+                <div class="text-neutral-80 fw-medium">
+                  <p class="mb-2">
+                    住宿天數：{{ room.daysCount }}晚
+                  </p>
+                  <p class="mb-0">
+                    住宿人數：{{ room.peopleNum }} 位
+                  </p>
+                </div>
 
-              <div class="text-neutral-80 fw-medium">
-                <p class="mb-2">
-                  住宿天數： 1 晚
+                <div class="text-neutral-80 fs-8 fs-md-7 fw-medium">
+                  <p class="title-deco mb-2">
+                    入住：<span v-day:YYYY年MM月DD日="room.checkInDate"></span>，15:00 可入住
+                  </p>
+                  <p
+                    class="title-deco mb-0"
+                  >
+                    退房：<span v-day:YYYY年MM月DD日="room.checkOutDate"></span>，12:00 前退房
+                  </p>
+                </div>
+                <p class="mb-3 text-neutral-80 fs-8 fs-md-7 fw-bold">
+                  NT$ {{ room.roomId.price }}
                 </p>
-                <p class="mb-0">
-                  住宿人數：2 位
-                </p>
-              </div>
-
-              <div class="text-neutral-80 fs-8 fs-md-7 fw-medium">
-                <p class="title-deco mb-2">
-                  入住：6 月 10 日星期二，15:00 可入住
-                </p>
-                <p
-                  class="title-deco mb-0"
-                >
-                  退房：6 月 11 日星期三，12:00 前退房
-                </p>
-              </div>
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-bold">
-                NT$ 10,000
-              </p>
-            </section>
+              </section>
+            </div>
+            <hr class="my-0 opacity-100 text-neutral-40">
           </div>
-
-          <hr class="my-0 opacity-100 text-neutral-40">
-
-          <div class="d-flex flex-column flex-lg-row gap-6">
-            <img
-              class="img-fluid object-fit-cover rounded-3"
-              style="max-width: 120px; height: 80px;"
-              src="/images/room-b-sm-1.png"
-              alt="room-a"
-            >
-            <section class="d-flex flex-column gap-4">
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-medium">
-                預訂參考編號： HH2302183151222
-              </p>
-            
-              <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-md-6 fw-bold">
-                尊爵雙人房
-              </h3>
-
-              <div class="text-neutral-80 fw-medium">
-                <p class="mb-2">
-                  住宿天數： 1 晚
-                </p>
-                <p class="mb-0">
-                  住宿人數：2 位
-                </p>
-              </div>
-
-              <div class="text-neutral-80 fs-8 fs-md-7 fw-medium">
-                <p class="title-deco mb-2">
-                  入住：6 月 10 日星期二，15:00 可入住
-                </p>
-                <p
-                  class="title-deco mb-0"
-                >
-                  退房：6 月 11 日星期三，12:00 前退房
-                </p>
-              </div>
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-bold">
-                NT$ 10,000
-              </p>
-            </section>
-          </div>
-
-          <hr class="my-0 opacity-100 text-neutral-40">
-
-          <div class="d-flex flex-column flex-lg-row gap-6">
-            <img
-              class="img-fluid object-fit-cover rounded-3"
-              style="max-width: 120px; height: 80px;"
-              src="/images/room-b-sm-1.png"
-              alt="room-a"
-            >
-            <section class="d-flex flex-column gap-4">
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-medium">
-                預訂參考編號： HH2302183151222
-              </p>
-            
-              <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-md-6 fw-bold">
-                尊爵雙人房
-              </h3>
-
-              <div class="text-neutral-80 fw-medium">
-                <p class="mb-2">
-                  住宿天數： 1 晚
-                </p>
-                <p class="mb-0">
-                  住宿人數：2 位
-                </p>
-              </div>
-
-              <div class="text-neutral-80 fs-8 fs-md-7 fw-medium">
-                <p class="title-deco mb-2">
-                  入住：6 月 10 日星期二，15:00 可入住
-                </p>
-                <p
-                  class="title-deco mb-0"
-                >
-                  退房：6 月 11 日星期三，12:00 前退房
-                </p>
-              </div>
-              <p class="mb-0 text-neutral-80 fs-8 fs-md-7 fw-bold">
-                NT$ 10,000
-              </p>
-            </section>
-          </div>
-
           <button
             class="btn btn-outline-primary-100 py-4 fw-bold"
             style="--bs-btn-hover-color: #fff"

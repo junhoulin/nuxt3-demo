@@ -1,4 +1,5 @@
 <script setup>
+import dayjs from 'dayjs';
 import { Icon } from '@iconify/vue';
 const route = useRoute();
 const { bookid } = route.params;
@@ -8,10 +9,8 @@ const goBooking = () => {
   router.push('/user/order');
 }
 
-const bookdata = ref(
-  {
-  }
-);
+const bookdata = ref({});
+const daysCount = ref({});
 
 const getBooking = async (id) => {
     if (!id) {
@@ -29,6 +28,9 @@ const getBooking = async (id) => {
         }
       })
       bookdata.value = data.value.result;
+      const checkInDate = dayjs(bookdata.value.checkInDate)
+      const checkOutDate = dayjs(bookdata.value.checkOutDate)
+      daysCount.value = checkOutDate.$D - checkInDate.$D
     } catch (error) {
       if (error.data) {
         console.log('API 回應錯誤內容:', error.data);
@@ -135,7 +137,7 @@ getBooking(bookid);
             <section class="d-flex flex-column gap-6">
               <h3 class="d-flex align-items-center mb-6 text-neutral-80 fs-8 fs-md-6 fw-bold">
                 <p class="mb-0">
-                  {{ bookdata?.roomId?.name}}，{{ bookdata?.roomId?.status }} 晚
+                  {{ bookdata?.roomId?.name}}，{{ daysCount }} 晚
                 </p>
                 <span
                   class="d-inline-block mx-4 bg-neutral-80"
@@ -148,12 +150,12 @@ getBooking(bookid);
 
               <div class="text-neutral-80 fs-8 fs-md-7 fw-bold">
                 <p class="title-deco mb-2">
-                  入住：{{ bookdata?.checkInDate }}，15:00 可入住
+                  入住：<span v-day:YYYY年MM月DD日="bookdata?.checkInDate"></span>，15:00 可入住
                 </p>
                 <p
                   class="title-deco mb-0"
                 >
-                  退房：{{ bookdata?.checkOutDate}}，12:00 前退房
+                  退房：<span v-day:YYYY年MM月DD日="bookdata?.checkOutDate"></span>，12:00 前退房
                 </p>
               </div>
 
